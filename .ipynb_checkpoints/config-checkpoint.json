@@ -1,0 +1,21 @@
+{
+    "paths":{
+        "source_dir":"/user/data/ml-25m/"
+    },
+    "spark":{
+        "master":"yarn",
+        "config":{
+        "spark.executor.memory":"4g",
+        "spark.executor.cores":"2",
+        "spark.driver.memory":"10g",
+        "spark.driver.cores":"4",
+        "spark.jars":"",
+        "spark.dynamicAllocation.enabled":true
+        }
+    },
+    "mysql":{
+            "user":"shiva",
+            "password":"shiva",
+            "url":"jdbc:mysql://localhost:3306/casestudy"
+        }
+}
