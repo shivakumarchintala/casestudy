@@ -1,8 +1,6 @@
-#reomve when pushing to production
-import findspark
-findspark.init()
 from pyspark.sql import functions as f, SparkSession,Row
 import json,os
+import xlrd
 import path_clm as pc
 
 
@@ -35,21 +33,21 @@ def caseStudy():
 
     #loading data from dynamodb
     df['genome-tags'] = (
-        spark.read.format("dynamodb").option("throughput",100000)
-                        .option("region","ap-south-1")
-                        .option("tableName","genome_tags").load()
+        spark.read.format("csv").option("header",True)
+                        .option("inferSchema",True)
+                        .load(SourceMacroDict['path']+"genome-tags.csv")
     )
 
     df['movies'] = (
-        spark.read.format("dynamodb").option("throughput",100000)
-                        .option("region","ap-south-1")
-                        .option("tableName","movies").load()
+        spark.read.format("csv").option("header",True)
+                        .option("inferSchema",True)
+                        .load(SourceMacroDict['path']+"movies.csv")
     )
 
     df['ratings'] = (
-        spark.read.format("dynamodb").option("throughput",100000)
-                        .option("region","ap-south-1")
-                        .option("tableName","ratings").load().drop("ratings_row")
+        spark.read.format("csv").option("header",True)
+                        .option("inferSchema",True)
+                        .load(SourceMacroDict['path']+"ratings.csv")
     )
 
 
@@ -59,7 +57,7 @@ def caseStudy():
 
     #final report 
     df['final_report'] = (
-        df['genome-scores'].where("relevance > 0.5").join(df['genome-tags'],['tagid'],'inner')
+        df['genome_scores'].where("relevance > 0.5").join(df['genome-tags'],['tagid'],'inner')
         .join(
             df['movies'].where("releasedInyear is not null") ,['movieID'],'inner'
         )
@@ -100,4 +98,8 @@ if __name__=="__main__":
         caseStudy()
         print("success")
     except Exception as e:
-        print(e)
+        print("failed")
+        
+        
+        
+        
