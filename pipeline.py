@@ -1,3 +1,5 @@
+#import findspark
+#findspark.init()
 from pyspark.sql import functions as f, SparkSession,Row
 import json,os
 import xlrd
@@ -57,7 +59,7 @@ def caseStudy():
 
     #final report 
     df['final_report'] = (
-        df['genome_scores'].where("relevance > 0.5").join(df['genome-tags'],['tagid'],'inner')
+        df['genome-scores'].where("relevance > 0.5").join(df['genome-tags'],['tagid'],'inner')
         .join(
             df['movies'].where("releasedInyear is not null") ,['movieID'],'inner'
         )
@@ -66,9 +68,11 @@ def caseStudy():
         )
     )
     #writing intermediate result to S3
-    df['final_report'].write.parquet(path.s3_path+"movielenz_final",mode="overwrite")
+    
+    df['final_report'].write.format("parquet").mode("overwrite").save(path.s3_path+"movielenz_final")
+    
 
-    df['final_report'] = spark.read.parquet(path.s3_path+"movielenz_final",mode="overwrite")
+    df['final_report'] = spark.read.parquet(path.s3_path+"movielenz_final")
 
 
     # query to report movie name year adn total ratings along with geners
@@ -98,7 +102,7 @@ if __name__=="__main__":
         caseStudy()
         print("success")
     except Exception as e:
-        print("failed")
+        print(e)
         
         
         
