@@ -69,10 +69,11 @@ def caseStudy():
     )
     #writing intermediate result to S3
     
-    df['final_report'].write.format("parquet").mode("overwrite").save(path.s3_path+"movielenz_final")
+#    df['final_report'].write.format("parquet").mode("overwrite").save(path.s3_path+"movielenz_final")
+    df['final_report'].write.format("parquet").mode("overwrite").save(SourceMacroDict['path']+"movielenz_final")
     
 
-    df['final_report'] = spark.read.parquet(path.s3_path+"movielenz_final")
+    df['final_report'] = spark.read.parquet(SourceMacroDict['path']+"movielenz_final")
 
 
     # query to report movie name year adn total ratings along with geners
