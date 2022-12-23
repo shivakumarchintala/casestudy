@@ -1,8 +1,8 @@
-import findspark
-findspark.init()
+#import findspark
+#findspark.init()
 from pyspark.sql import functions as f, SparkSession,Row
 import json,os
-import xlrd
+#import xlrd
 import path_clm as pc
 import logging
 from importlib import reload
@@ -34,7 +34,11 @@ def caseStudy():
     ##creating data frames
     df = {}
 
-    df['genome-scores'] = spark.table("genome_scores") # loading data from hive
+    df['genome-scores'] = (spark.read.format("csv").option("header",True)
+    				.option("inferSchema",True)
+    				.load(SourceMacroDict['path']+"genome-scores.csv"))
+    				#.table("genome_scores") # loading data from hive
+    
 
     #loading data from dynamodb
     df['genome-tags'] = (
