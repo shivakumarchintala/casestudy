@@ -1,7 +1,7 @@
 {
     "paths":{
-        "source_dir":"s3://mypipelinecode/data/",
-        "intermediate_data":"s3://mypipelinecode/data/intermediate/"
+        "source_dir":"s3a://mypipelinecode/data/",
+        "intermediate_data":"s3a://mypipelinecode/data/intermediate/"
     },
     "spark":{
         "master":"yarn",
