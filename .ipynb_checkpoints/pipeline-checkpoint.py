@@ -4,9 +4,7 @@ from pyspark.sql import functions as f, SparkSession,Row
 import json,os
 import xlrd
 import path_clm as pc
-import logging
-from importlib import reload
-reload(logging)
+
 
 
 path = pc.Path()
@@ -29,7 +27,6 @@ def caseStudy():
     SourceMacroDict = {}
 
     SourceMacroDict['path'] = config['paths']['source_dir']
-    SourceMacroDict['intermediate'] = config['paths']['intermediate_data']
 
     ##creating data frames
     df = {}
@@ -73,10 +70,10 @@ def caseStudy():
     #writing intermediate result to S3
     
 #    df['final_report'].write.format("parquet").mode("overwrite").save(path.s3_path+"movielenz_final")
-    df['final_report'].write.format("parquet").mode("overwrite").save(SourceMacroDict['intermediate']+"movielenz_final")
+    df['final_report'].write.format("parquet").mode("overwrite").save(SourceMacroDict['path']+"movielenz_final")
     
 
-    df['final_report'] = spark.read.parquet(SourceMacroDict['intermediate']+"movielenz_final")
+    df['final_report'] = spark.read.parquet(SourceMacroDict['path']+"movielenz_final")
 
 
     # query to report movie name year adn total ratings along with geners

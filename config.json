@@ -1,6 +1,7 @@
 {
     "paths":{
-        "source_dir":"/user/data/ml-25m/"
+        "source_dir":"s3://mypipelinecode/data/",
+        "intermediate_data":"s3://mypipelinecode/data/intermediate/"
     },
     "spark":{
         "master":"yarn",
